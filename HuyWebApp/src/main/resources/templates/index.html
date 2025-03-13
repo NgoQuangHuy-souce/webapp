@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store | Home</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Online Store</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">Products</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li th:each="category : ${categories}">
+                                <a class="dropdown-item" th:href="@{'/products/category/' + ${category.id}}" th:text="${category.name}">Category Name</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="d-flex me-2" action="/products/search" method="get">
+                    <input class="form-control me-2" type="search" name="keyword" placeholder="Search products..." aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+                <div class="d-flex">
+                    <a href="/cart" class="btn btn-outline-light me-2">
+                        <i class="bi bi-cart"></i> Cart <span class="badge bg-danger" th:text="${cartItemCount != null ? cartItemCount : '0'}">0</span>
+                    </a>
+                    <a href="/login" class="btn btn-outline-light me-2" th:if="${session.user == null}">Login</a>
+                    <a href="/register" class="btn btn-primary" th:if="${session.user == null}">Register</a>
+                    <div class="dropdown" th:if="${session.user != null}">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <span th:text="${session.user.name}">User</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/account">My Account</a></li>
+                            <li><a class="dropdown-item" href="/orders">My Orders</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <!-- Hero section -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1>Welcome to Our Online Store</h1>
+                    <p class="lead">Discover amazing products at competitive prices.</p>
+                    <a href="/products" class="btn btn-primary">Shop Now</a>
+                </div>
+                <div class="col-md-6">
+                    <img src="/images/hero-image.jpg" alt="Store Banner" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured products section -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="mb-4">Featured Products</h2>
+            <div class="row">
+                <!-- Products will be dynamically added here -->
+                <div class="col-md-3 mb-4" th:each="product : ${featuredProducts}">
+                    <div class="card h-100">
+                        <img th:src="${product.imageUrl != null ? product.imageUrl : '/images/placeholder.jpg'}" class="card-img-top" alt="Product Image">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${product.name}">Product Name</h5>
+                            <p class="card-text text-truncate" th:text="${product.description}">Product description...</p>
+                            <p class="card-text fw-bold" th:text="${'$' + product.price}">$99.99</p>
+                            <a th:href="@{'/products/' + ${product.id}}" class="btn btn-sm btn-outline-primary">View Details</a>
+                            <form th:action="@{/cart/add}" method="post" class="d-inline">
+                                <input type="hidden" name="productId" th:value="${product.id}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-sm btn-primary">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="/products" class="btn btn-outline-primary">View All Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="mb-4">Shop by Category</h2>
+            <div class="row">
+                <!-- Categories will be dynamically added here -->
+                <div class="col-md-4 mb-4" th:each="category : ${categories}">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title" th:text="${category.name}">Category Name</h5>
+                            <p class="card-text" th:text="${category.description}">Category description...</p>
+                            <a th:href="@{'/products/category/' + ${category.id}}" class="btn btn-primary">View Products</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits section -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Why Shop With Us?</h2>
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <div class="mb-4">
+                        <i class="bi bi-truck text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5>Free Shipping</h5>
+                    <p class="text-muted">Free shipping on all orders over $50</p>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="mb-4">
+                        <i class="bi bi-arrow-repeat text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5>Easy Returns</h5>
+                    <p class="text-muted">30-day return policy for all items</p>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="mb-4">
+                        <i class="bi bi-shield-check text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5>Secure Payment</h5>
+                    <p class="text-muted">Your payment information is always safe</p>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="mb-4">
+                        <i class="bi bi-headset text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5>24/7 Support</h5>
+                    <p class="text-muted">Our customer service is always available</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter section -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center">
+                    <h3>Subscribe to our Newsletter</h3>
+                    <p>Get updates on new products, sales, and more.</p>
+                    <form class="mt-4">
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Your email address" aria-label="Email address">
+                            <button class="btn btn-light" type="submit">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>Online Store</h5>
+                <p>Your one-stop shop for all your needs.</p>
+            </div>
+            <div class="col-md-4">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/" class="text-white">Home</a></li>
+                    <li><a href="/products" class="text-white">Products</a></li>
+                    <li><a href="/about" class="text-white">About Us</a></li>
+                    <li><a href="/contact" class="text-white">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Contact Us</h5>
+                <address>
+                    <p>123 Store Street, City<br>
+                        Email: info@store.com<br>
+                        Phone: (123) 456-7890</p>
+                </address>
+            </div>
+        </div>
+        <hr>
+        <div class="text-center">
+            <p>&copy; 2025 Online Store. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/script.js"></script>
+</body>
+</html>
