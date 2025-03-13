@@ -13,6 +13,7 @@
     <groupId>org.example</groupId>
     <artifactId>HuyWebApp</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>  <!-- Thay đổi đóng gói thành WAR -->
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -24,7 +25,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>3.1.4</version>
         </dependency>
 
         <!-- Spring Boot Data JPA -->
@@ -41,6 +41,33 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Thymeleaf -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <!-- Servlet API -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Spring Boot Tomcat (provided) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Spring Boot DevTools -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
 
         <!-- Spring Boot Test -->
         <dependency>
@@ -50,4 +77,13 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>HuyWebApp</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

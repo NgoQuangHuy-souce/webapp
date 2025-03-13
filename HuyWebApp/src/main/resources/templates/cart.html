@@ -103,7 +103,7 @@
                       </div>
                     </div>
                   </td>
-                  <td th:text="${' + entry.key.price}">$99.99</td>
+                  <td th:text="${'$' + entry.key.price}">$99.99</td>
                   <td>
                     <form th:action="@{/cart/update}" method="post" class="d-flex">
                       <input type="hidden" name="productId" th:value="${entry.key.id}">
@@ -119,7 +119,7 @@
                       <button type="submit" class="btn btn-sm btn-outline-primary ms-2" style="display:none">Update</button>
                     </form>
                   </td>
-                  <td th:text="${' + (entry.key.price * entry.value)}">$299.97</td>
+                  <td th:text="${'$' + (entry.key.price * entry.value)}">$299.97</td>
                   <td>
                     <form th:action="@{/cart/remove}" method="post">
                       <input type="hidden" name="productId" th:value="${entry.key.id}">
@@ -155,7 +155,7 @@
           <div class="card-body">
             <div class="d-flex justify-content-between mb-2">
               <span>Subtotal:</span>
-              <span th:text="${' + total}">$399.97</span>
+              <span th:text="${'$' + total}">$399.97</span>
             </div>
             <div class="d-flex justify-content-between mb-2">
               <span>Shipping:</span>
@@ -163,12 +163,12 @@
             </div>
             <div class="d-flex justify-content-between mb-2">
               <span>Tax:</span>
-              <span th:text="${' + (total * 0.1).toFixed(2)}">$39.99</span>
+              <span th:text="${'$' + #numbers.formatDecimal(total * 0.1, 1, 2)}">$39.99</span>
             </div>
             <hr>
             <div class="d-flex justify-content-between fw-bold">
               <span>Total:</span>
-              <span class="text-primary" th:text="${' + (total * 1.1).toFixed(2)}">$439.96</span>
+              <span class="text-primary" th:text="${'$' + #numbers.formatDecimal(total * 1.1, 1, 2)}">$439.96</span>
             </div>
 
             <div class="mt-4">
@@ -234,3 +234,5 @@
     }
   }
 </script>
+</body>
+</html>
